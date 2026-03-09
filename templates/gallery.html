@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Gallery – FarmCare{% endblock %}
+
+{% block content %}
+<div style="padding-top:70px;">
+    <!-- Header -->
+    <div
+        style="background:linear-gradient(135deg,var(--primary-dark),var(--primary));padding:4rem 0 3rem;text-align:center;color:#fff;">
+        <div class="container">
+            <div class="section-label" style="color:var(--accent-light);">📸 Our Gallery</div>
+            <h1 class="display-font" style="color:#fff;margin:.5rem 0 1rem;">From the Cardamom Fields</h1>
+            <p style="opacity:.8;max-width:480px;margin:0 auto;">Explore the beauty and hard work behind every cardamom
+                harvest.</p>
+        </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div
+        style="background:var(--card-bg);border-bottom:1px solid var(--border);padding:.75rem 0;position:sticky;top:70px;z-index:100;">
+        <div class="container" style="display:flex;gap:.5rem;flex-wrap:wrap;">
+            <a href="{% url 'gallery' %}"
+                class="btn btn-sm {% if not selected_category %}btn-primary{% else %}btn-ghost{% endif %}">All</a>
+            {% for cat in categories %}
+            <a href="?category={{ cat }}"
+                class="btn btn-sm {% if selected_category == cat %}btn-primary{% else %}btn-ghost{% endif %}">
+                {% if cat == 'farm' %}🌾{% elif cat == 'harvest' %}🪺{% elif cat == 'processing' %}⚙️{% elif cat ==
+                'community' %}👥{% else %}📷{% endif %}
+                {{ cat|capfirst }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="container section">
+        {% if images %}
+        <div class="gallery-grid">
+            {% for img in images %}
+            <div class="gallery-item fade-in" data-delay="{{ forloop.counter0|add:0 }}00"
+                onclick="openLightbox('{{ img.image.url }}','{{ img.title }}','{{ img.caption }}')">
+                <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy" />
+                <div class="gallery-overlay">
+                    <div class="gallery-overlay-content">
+                        <h4>{{ img.title }}</h4>
+                        {% if img.caption %}<p>{{ img.caption|truncatechars:60 }}</p>{% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="icon">📸</div>
+            <h3>No Images Yet</h3>
+            <p>Gallery images will appear here once uploaded by the admin.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <div style="text-align:center;" onclick="event.stopPropagation()">
+        <img id="lightboxImg" src="" alt="" />
+        <div id="lightboxCaption" style="color:#fff;margin-top:1rem;font-size:.9rem;opacity:.8;"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function openLightbox(src, title, caption) {
+        document.getElementById('lightboxImg').src = src;
+        document.getElementById('lightboxImg').alt = title;
+        document.getElementById('lightboxCaption').textContent = caption || title;
+        document.getElementById('lightbox').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+{% endblock %}

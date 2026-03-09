@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Soil Test Request – FarmCare{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div>
+                <div class="sidebar-logo">🌿 FarmCare</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section">Main</div>
+            <a href="{% url 'farmer_dashboard' %}" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a>
+            <a href="{% url 'ai_detect' %}" class="sidebar-link"><span class="icon">🤖</span> AI Detection</a>
+            <a href="{% url 'history' %}" class="sidebar-link"><span class="icon">📋</span> My History</a>
+            <a href="{% url 'soil_request' %}" class="sidebar-link active"><span class="icon">🧪</span> Soil Test</a>
+            <div class="sidebar-section">Other</div>
+            <a href="{% url 'home' %}" class="sidebar-link"><span class="icon">🌐</span> Public Site</a>
+            <a href="{% url 'logout' %}" class="sidebar-link" style="color:rgba(255,100,100,.8);"><span
+                    class="icon">🚪</span> Logout</a>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main">
+        <div class="page-header">
+            <h1>🧪 Request Soil Test</h1>
+            <p>Submit a soil testing request and our agricultural officers will coordinate with you.</p>
+        </div>
+
+        <div class="grid-2" style="align-items:start;gap:2rem;">
+            <!-- Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 style="font-size:1rem;">📋 New Soil Test Request</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="form-label">Farm Location *</label>
+                            {{form.farm_location}}
+                            <div class="form-help">Enter your village, district, or landmark.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Farm Size (acres) *</label>
+                            {{form.farm_size}}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Soil Type (optional)</label>
+                            {{form.soil_type}}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Additional Information</label>
+                            {{form.additional_info}}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Submit Request 🌱</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Info + Past Requests -->
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+                <div class="card" style="background:linear-gradient(135deg,var(--pale-green),#fff);">
+                    <div class="card-body">
+                        <h3 style="font-size:1rem;margin-bottom:1rem;">ℹ️ How Soil Testing Works</h3>
+                        <div style="display:flex;flex-direction:column;gap:.85rem;">
+                            <div style="display:flex;gap:.75rem;align-items:flex-start;">
+                                <div
+                                    style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;">
+                                    1</div>
+                                <p style="font-size:.85rem;color:var(--text-mid);">Submit your request with farm details
+                                    and location.</p>
+                            </div>
+                            <div style="display:flex;gap:.75rem;align-items:flex-start;">
+                                <div
+                                    style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;">
+                                    2</div>
+                                <p style="font-size:.85rem;color:var(--text-mid);">Admin reviews and schedules a visit
+                                    date.</p>
+                            </div>
+                            <div style="display:flex;gap:.75rem;align-items:flex-start;">
+                                <div
+                                    style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;">
+                                    3</div>
+                                <p style="font-size:.85rem;color:var(--text-mid);">Our officer collects soil samples
+                                    from your farm.</p>
+                            </div>
+                            <div style="display:flex;gap:.75rem;align-items:flex-start;">
+                                <div
+                                    style="width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;">
+                                    4</div>
+                                <p style="font-size:.85rem;color:var(--text-mid);">You receive a detailed soil health
+                                    report with fertilizer recommendations.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Previous Requests -->
+                {% if existing_requests %}
+                <div class="card">
+                    <div class="card-header">
+                        <h3 style="font-size:1rem;">📜 Previous Requests</h3>
+                    </div>
+                    <div style="padding:0;">
+                        {% for req in existing_requests %}
+                        <div
+                            style="padding:.9rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <div style="font-size:.85rem;font-weight:600;">{{req.farm_location|truncatechars:30}}
+                                </div>
+                                <div style="font-size:.75rem;color:var(--text-light);">{{req.requested_at|date:"d M Y"}}
+                                </div>
+                            </div>
+                            <span
+                                class="badge {% if req.status == 'completed' %}badge-green{% elif req.status == 'rejected' %}badge-red{% elif req.status == 'pending' %}badge-yellow{% else %}badge-blue{% endif %}">{{req.status}}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Upload Gallery – Admin{% endblock %}
+{% block content %}
+<div class="dashboard-layout">
+    {% include 'admin_panel/_sidebar.html' %}
+    <main class="dashboard-main">
+        <div class="page-header">
+            <h1>📸 Upload Gallery Image</h1>
+            <p>Add new beautiful images to the public gallery.</p>
+        </div>
+
+        <div class="card" style="max-width:600px;margin:0 auto;">
+            <div class="card-header">
+                <h3 style="font-size:1rem;">Add New Image</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="form-label">Image Title</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Select Image File</label>
+                        {{ form.image }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        {{ form.category }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Caption / Description</label>
+                        {{ form.caption }}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">Upload to Gallery ✨</button>
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-ghost btn-block"
+                        style="margin-top:.5rem;">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

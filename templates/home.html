@@ -1,0 +1,368 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}FarmCare – Smart Cardamom Farming{% endblock %}
+
+{% block content %}
+
+<!-- ── Price Ticker ─────────────────────────────────── -->
+<div class="price-ticker-wrap" style="margin-top:70px;">
+    <div class="price-ticker" id="priceTicker">
+        {% for price in ticker_prices %}
+        <div class="ticker-item">
+            <span class="ticker-dot"></span>
+            <span style="font-weight:700;">{{ price.market }}</span>
+            <span style="font-size:0.75rem; color:var(--accent); margin-left:2px;">({{ price.date|date:"d M"|upper
+                }})</span>
+            <span style="opacity:.5;">·</span>
+            <span class="ticker-price">₹{{ price.modal_price|default:"—" }}/kg</span>
+        </div>
+        {% empty %}
+        <div class="ticker-item">
+            <span class="ticker-dot"></span>
+            <span>Cardamom Prices Updated Daily</span>
+            <span class="ticker-dot"></span>
+            <span>Bodinayakanur Market</span>
+            <span class="ticker-dot"></span>
+            <span class="ticker-price">Check Dashboard</span>
+        </div>
+        {% endfor %}
+        <!-- Duplicate for seamless loop -->
+        {% for price in ticker_prices %}
+        <div class="ticker-item">
+            <span class="ticker-dot"></span>
+            <span style="font-weight:700;">{{ price.market }}</span>
+            <span style="font-size:0.75rem; color:var(--accent); margin-left:2px;">({{ price.date|date:"d M"|upper
+                }})</span>
+            <span style="opacity:.5;">·</span>
+            <span class="ticker-price">₹{{ price.modal_price|default:"—" }}/kg</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ── Hero ─────────────────────────────────────────── -->
+<section class="hero" id="hero">
+    <!-- Parallax background image -->
+    <div class="hero-parallax-img">
+        <img src="https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=1600&q=60"
+            alt="Cardamom Farm" />
+    </div>
+    <!-- Minimal dark scrim -->
+    <div class="hero-scrim"></div>
+
+    <div class="container" style="width:100%;">
+        <div class="hero-inner">
+            <!-- Left: Text Content -->
+            <div class="hero-content">
+                <div class="hero-tag">🌿 Cardamom Farming Intelligence</div>
+                <h1 class="hero-title display-font">
+                    Smart Farming<br />For <span>Cardamom</span><br />Growers
+                </h1>
+                <p class="hero-sub">AI-powered disease detection, real-time market prices, and expert guidance — all in
+                    one platform built for Kerala's cardamom farmers.</p>
+                <div class="hero-actions">
+                    <a href="{% url 'register' %}" class="btn btn-hero-primary">🚀 Get Started Free</a>
+                    <a href="{% url 'login' %}" class="btn btn-hero-outline">Sign In</a>
+                </div>
+
+                <!-- Mini stats under CTA -->
+                <div class="hero-mini-stats">
+                    <div class="hero-mini-stat"><strong>{{ farmer_count }}+</strong><span>Farmers</span></div>
+                    <div class="hero-mini-divider"></div>
+                    <div class="hero-mini-stat"><strong>Daily</strong><span>Prices</span></div>
+                    <div class="hero-mini-divider"></div>
+                    <div class="hero-mini-stat"><strong>AI</strong><span>Disease Detection</span></div>
+                </div>
+            </div>
+
+            <!-- Right: Image Slideshow -->
+            <div class="hero-slideshow">
+                <div class="hero-slides" id="heroSlides">
+                    <div class="hero-slide active">
+                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=800&q=80"
+                            alt="Cardamom Harvest" />
+                        <div class="hero-slide-caption">🌿 Cardamom Harvest</div>
+                    </div>
+                    <div class="hero-slide">
+                        <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=800&q=80"
+                            alt="Cardamom Plantation" />
+                        <div class="hero-slide-caption">🌱 Plantation Fields</div>
+                    </div>
+                    <div class="hero-slide">
+                        <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=800&q=80"
+                            alt="Spice Processing" />
+                        <div class="hero-slide-caption">✨ Spice Processing</div>
+                    </div>
+                    <div class="hero-slide">
+                        <img src="https://images.unsplash.com/photo-1592921870789-04563d55041c?auto=format&fit=crop&w=800&q=80"
+                            alt="Healthy Plants" />
+                        <div class="hero-slide-caption">💚 Healthy Plants</div>
+                    </div>
+                    <div class="hero-slide">
+                        <img src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=800&q=80"
+                            alt="Fresh Harvest" />
+                        <div class="hero-slide-caption">🧺 Fresh Harvest</div>
+                    </div>
+                    <div class="hero-slide">
+                        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=800&q=80"
+                            alt="Farm Fields" />
+                        <div class="hero-slide-caption">🌄 Kerala Farm Fields</div>
+                    </div>
+                </div>
+                <!-- Dot navigation -->
+                <div class="hero-dots" id="heroDots">
+                    <button class="hero-dot active" data-slide="0"></button>
+                    <button class="hero-dot" data-slide="1"></button>
+                    <button class="hero-dot" data-slide="2"></button>
+                    <button class="hero-dot" data-slide="3"></button>
+                    <button class="hero-dot" data-slide="4"></button>
+                    <button class="hero-dot" data-slide="5"></button>
+                </div>
+                <!-- Prev/Next arrows -->
+                <button class="hero-arrow hero-arrow-prev" id="heroPrev">&#8249;</button>
+                <button class="hero-arrow hero-arrow-next" id="heroNext">&#8250;</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ── Stats Bar ─────────────────────────────────────── -->
+<section class="section-sm" style="background:var(--card-bg);">
+    <div class="container">
+        <div class="grid-4">
+            <div class="stat-card fade-in">
+                <div class="stat-number" data-counter="{{ farmer_count }}">{{ farmer_count }}</div>
+                <div class="stat-label">Registered Farmers</div>
+            </div>
+            <div class="stat-card fade-in" data-delay="100">
+                <div class="stat-number" data-counter="{{ report_count }}">{{ report_count }}</div>
+                <div class="stat-label">AI Reports Generated</div>
+            </div>
+            <div class="stat-card fade-in" data-delay="200">
+                <div class="stat-number">Daily</div>
+                <div class="stat-label">Price Updates</div>
+            </div>
+            <div class="stat-card fade-in" data-delay="300">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">AI Availability</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── Daily Prices ───────────────────────────────────── -->
+<section class="section" id="prices">
+    <div class="container">
+        <div class="center fade-in" style="margin-bottom:3rem;">
+            <div class="section-label">📊 Live Market Data</div>
+            <h2 class="section-title">Today's Cardamom Prices</h2>
+            <p class="section-subtitle">Real-time prices scraped daily from Indian Spices Board markets. Last updated:
+                {{ price_date }}</p>
+        </div>
+
+        {% if prices %}
+        <div class="grid-4" data-stagger>
+            {% for price in prices %}
+            <div class="price-card">
+                <div class="price-market">{{ price.market }}</div>
+                <div class="price-grade">{{ price.grade|upper }}</div>
+                <div class="price-value">₹{{ price.modal_price|default:"-" }} <span>/ kg</span></div>
+                {% if price.min_price and price.max_price %}
+                <div class="price-range">Range: ₹{{ price.min_price }} - ₹{{ price.max_price }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="icon">📊</div>
+            <p>Prices are being fetched. Please check back shortly.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- ── Features ───────────────────────────────────────── -->
+<section class="section green-bg-section" id="features">
+    <div class="container">
+        <div class="center fade-in" style="margin-bottom:3rem;">
+            <div class="section-label">✨ What We Offer</div>
+            <h2 class="section-title">Everything You Need</h2>
+        </div>
+        <div class="grid-3" data-stagger>
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI Disease Detection</h3>
+                <p>Upload a photo of your cardamom plant and get instant disease diagnosis powered by Google Gemini AI
+                    with treatment recommendations.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3>Live Market Prices</h3>
+                <p>Daily cardamom prices from all major markets — Bodinayakanur, Kumily, Vandanmedu — updated every
+                    morning automatically.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧪</div>
+                <h3>Soil Test Requests</h3>
+                <p>Request professional soil testing directly through the app. Admins coordinate sample collection and
+                    send detailed reports.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📋</div>
+                <h3>Disease History</h3>
+                <p>Track all your AI reports over time. View disease patterns, treatment outcomes, and recommendations
+                    for your farm.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👨‍💼</div>
+                <h3>Admin Dashboard</h3>
+                <p>Admins get full visibility into disease trends across all farmers, soil test requests, and can
+                    generate comprehensive reports.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💊</div>
+                <h3>Medicine Recommendations</h3>
+                <p>Get precise fungicide, pesticide and organic treatment recommendations based on detected diseases
+                    with dosage guidance.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── Horizontal Gallery Scroll ─────────────────────── -->
+<section class="section" style="background:var(--bg);overflow:hidden;">
+    <div class="container">
+        <div class="fade-in" style="margin-bottom:2rem;">
+            <div class="section-label">📸 Our Farm Gallery</div>
+            <h2 class="section-title">From the Fields</h2>
+        </div>
+    </div>
+
+    <div class="h-scroll-section">
+        <div class="h-scroll-track" id="hScrollTrack">
+            {% for img in gallery_images %}
+            <div class="h-scroll-item">
+                <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy" />
+                <div class="h-scroll-item-overlay">
+                    <span>{{ img.title }}</span>
+                </div>
+            </div>
+            {% empty %}
+            <!-- Unsplash gallery placeholders -->
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=600&q=80"
+                    alt="Cardamom" />
+                <div class="h-scroll-item-overlay"><span>Cardamom Harvest</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80"
+                    alt="Spices" />
+                <div class="h-scroll-item-overlay"><span>Spice Processing</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=600&q=80"
+                    alt="Farm" />
+                <div class="h-scroll-item-overlay"><span>Green Fields</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80"
+                    alt="Plantation" />
+                <div class="h-scroll-item-overlay"><span>Plantation</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=600&q=80"
+                    alt="Harvest" />
+                <div class="h-scroll-item-overlay"><span>Fresh Harvest</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=600&q=80"
+                    alt="Farmer" />
+                <div class="h-scroll-item-overlay"><span>Farmer at Work</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1592921870789-04563d55041c?auto=format&fit=crop&w=600&q=80"
+                    alt="Plants" />
+                <div class="h-scroll-item-overlay"><span>Healthy Plants</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=600&q=80"
+                    alt="Aerial" />
+                <div class="h-scroll-item-overlay"><span>Aerial View</span></div>
+            </div>
+            {% endfor %}
+
+            <!-- Duplicate for loop -->
+            {% for img in gallery_images %}
+            <div class="h-scroll-item">
+                <img src="{{ img.image.url }}" alt="{{ img.title }}" loading="lazy" />
+                <div class="h-scroll-item-overlay"><span>{{ img.title }}</span></div>
+            </div>
+            {% empty %}
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=600&q=80"
+                    alt="Cardamom" />
+                <div class="h-scroll-item-overlay"><span>Cardamom Harvest</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80"
+                    alt="Spices" />
+                <div class="h-scroll-item-overlay"><span>Spice Processing</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=600&q=80"
+                    alt="Farm" />
+                <div class="h-scroll-item-overlay"><span>Green Fields</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=600&q=80"
+                    alt="Plantation" />
+                <div class="h-scroll-item-overlay"><span>Plantation</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=600&q=80"
+                    alt="Harvest" />
+                <div class="h-scroll-item-overlay"><span>Fresh Harvest</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=600&q=80"
+                    alt="Farmer" />
+                <div class="h-scroll-item-overlay"><span>Farmer at Work</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1592921870789-04563d55041c?auto=format&fit=crop&w=600&q=80"
+                    alt="Plants" />
+                <div class="h-scroll-item-overlay"><span>Healthy Plants</span></div>
+            </div>
+            <div class="h-scroll-item"><img
+                    src="https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=600&q=80"
+                    alt="Aerial" />
+                <div class="h-scroll-item-overlay"><span>Aerial View</span></div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container" style="margin-top:2rem;text-align:center;">
+        <a href="{% url 'gallery' %}" class="btn btn-outline">View Full Gallery →</a>
+    </div>
+</section>
+
+<!-- ── CTA ───────────────────────────────────────────── -->
+<section class="section dark-section">
+    <div class="container center fade-in">
+        <div class="section-label" style="color:var(--accent);">🌱 Start Today</div>
+        <h2 class="section-title" style="color:white;margin-bottom:1rem;">Ready to Protect Your Farm?</h2>
+        <p style="color:rgba(255,255,255,.7);max-width:500px;margin:0 auto 2.5rem;">Join hundreds of cardamom farmers
+            already using FarmCare to detect diseases early and get expert guidance.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+            <a href="{% url 'register' %}" class="btn btn-hero-primary"
+                style="font-size:1rem;padding:.9rem 2.2rem;">Create Free Account</a>
+            <a href="{% url 'about' %}" class="btn btn-hero-outline" style="font-size:1rem;padding:.9rem 2.2rem;">Learn
+                More</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

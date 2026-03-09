@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Admin Dashboard – FarmCare{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    {% include 'admin_panel/_sidebar.html' %}
+
+    <main class="dashboard-main">
+        <div class="page-header">
+            <h1>📊 Admin Dashboard</h1>
+            <p>Overview of all farmer activities and system status.</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid-4" style="margin-bottom:2rem;" data-stagger>
+            <div class="stat-card">
+                <div class="stat-number" data-counter="{{ total_farmers }}">{{ total_farmers }}</div>
+                <div class="stat-label">Total Farmers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-counter="{{ total_reports }}">{{ total_reports }}</div>
+                <div class="stat-label">AI Reports</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-counter="{{ pending_soil }}">{{ pending_soil }}</div>
+                <div class="stat-label">Pending Soil Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">Daily</div>
+                <div class="stat-label">Price Updates</div>
+            </div>
+        </div>
+
+        <div style="display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;">
+            <a href="{% url 'trigger_scrape' %}" class="btn btn-primary"><span>🔄</span> Update Today's Prices</a>
+            <a href="{% url 'admin_soil_requests' %}" class="btn btn-outline"><span>🧪</span> Manage Soil Requests</a>
+            <a href="{% url 'admin_disease_reports' %}" class="btn btn-ghost"><span>🔬</span> View All Reports</a>
+        </div>
+
+        <div class="grid-2">
+            <!-- Latest Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 style="font-size:1rem;">📝 Latest AI Activity</h3>
+                </div>
+                <div class="card-body" style="padding:0;">
+                    {% if latest_reports %}
+                    {% for report in latest_reports %}
+                    <div
+                        style="display:flex;align-items:center;gap:1.25rem;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);">
+                        <div
+                            style="width:40px;height:40px;border-radius:10px;background:var(--pale-green);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">
+                            🍃</div>
+                        <div style="flex:1;min-width:0;">
+                            <div style="font-size:.88rem;font-weight:700;">{{ report.disease_detected|default:"Pending
+                                Diagnosis" }}</div>
+                            <div style="font-size:.78rem;color:var(--text-light);">by {{
+                                report.farmer.get_full_name|default:report.farmer.username }}</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:.78rem;font-weight:600;">{{ report.created_at|date:"d M" }}</div>
+                            <div
+                                class="badge {% if report.status == 'completed' %}badge-green{% else %}badge-yellow{% endif %}">
+                                {{ report.status }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p style="padding:2rem;text-align:center;color:var(--text-light);">No recent reports found.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Disease Distribution -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 style="font-size:1rem;">📈 Disease Distribution</h3>
+                </div>
+                <div class="card-body">
+                    {% if disease_stats %}
+                    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+                        {% for stat in disease_stats %}
+                        <div>
+                            <div
+                                style="display:flex;justify-content:space-between;margin-bottom:.5rem;font-size:.85rem;">
+                                <span style="font-weight:600;">{{ stat.disease_detected }}</span>
+                                <span style="color:var(--text-mid);">{{ stat.count }} cases ({{ stat.pct|floatformat:1
+                                    }}%)</span>
+                            </div>
+                            <div style="height:8px;background:var(--pale-green);border-radius:10px;overflow:hidden;">
+                                <div style="height:100%;background:var(--primary);width:0;transition:width 1s cubic-bezier(0.34, 1.56, 0.64, 1);"
+                                    data-pct="{{ stat.pct }}"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p style="padding:2rem;text-align:center;color:var(--text-light);">No analytical data yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Animate progress bars on load
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            document.querySelectorAll('[data-pct]').forEach(bar => {
+                bar.style.width = bar.getAttribute('data-pct') + '%';
+            });
+        }, 500);
+    });
+</script>
+{% endblock %}

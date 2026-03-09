@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Soil Requests – Admin{% endblock %}
+{% block content %}
+<div class="dashboard-layout">
+    {% include 'admin_panel/_sidebar.html' %}
+    <main class="dashboard-main">
+        <div class="page-header">
+            <h1>🧪 Soil Test Requests</h1>
+            <p>Status of all soil testing requests submitted by farmers.</p>
+        </div>
+
+        {% if requests %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Farmer</th>
+                        <th>Location</th>
+                        <th>Size</th>
+                        <th>Status</th>
+                        <th>Requested On</th>
+                        <th>Scheduled For</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for req in requests %}
+                    <tr>
+                        <td>
+                            <div style="font-weight:600;font-size:.88rem;">{{
+                                req.farmer.get_full_name|default:req.farmer.username }}</div>
+                        </td>
+                        <td style="font-size:.82rem;">{{ req.farm_location }}</td>
+                        <td>{{ req.farm_size }} ac</td>
+                        <td>
+                            <span
+                                class="badge {% if req.status == 'completed' %}badge-green{% elif req.status == 'rejected' %}badge-red{% elif req.status == 'pending' %}badge-yellow{% else %}badge-blue{% endif %}">
+                                {{ req.status|title }}
+                            </span>
+                        </td>
+                        <td style="font-size:.82rem;">{{ req.requested_at|date:"d M Y" }}</td>
+                        <td style="font-size:.82rem;">{{ req.scheduled_date|default:"—" }}</td>
+                        <td><a href="{% url 'update_soil_request' req.id %}" class="btn btn-ghost btn-sm">Update</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="icon">🧪</div>
+            <p>No soil test requests found yet.</p>
+        </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

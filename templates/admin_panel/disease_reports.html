@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Disease Reports – Admin{% endblock %}
+{% block content %}
+<div class="dashboard-layout">
+    {% include 'admin_panel/_sidebar.html' %}
+    <main class="dashboard-main">
+        <div class="page-header">
+            <h1>🔬 Disease Reports</h1>
+            <p>All AI-generated disease analyses from all farmers.</p>
+        </div>
+
+        <!-- Filters -->
+        <form method="get" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2rem;">
+            <select name="farmer_id" class="form-input" style="width:200px;">
+                <option value="">All Farmers</option>
+                {% for farmer in farmers %}
+                <option value="{{ farmer.id }}" {% if selected_farmer==farmer.id|stringformat:"s" %}selected{% endif %}>
+                    {{ farmer.get_full_name|default:farmer.username }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="disease" value="{{ disease_filter }}" placeholder="Filter by disease..."
+                class="form-input" style="width:200px;" />
+            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+            <a href="{% url 'admin_disease_reports' %}" class="btn btn-ghost btn-sm">Clear</a>
+        </form>
+
+        {% if reports %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Farmer</th>
+                        <th>Disease Detected</th>
+                        <th>Confidence</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td>
+                            {% if report.image %}
+                            <img src="{{ report.image.url }}"
+                                style="width:48px;height:48px;border-radius:8px;object-fit:cover;" />
+                            {% else %}
+                            <div
+                                style="width:48px;height:48px;border-radius:8px;background:var(--pale-green);display:flex;align-items:center;justify-content:center;">
+                                🌿</div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div style="font-weight:600;font-size:.88rem;">{{
+                                report.farmer.get_full_name|default:report.farmer.username }}</div>
+                            <div style="font-size:.75rem;color:var(--text-mid);">@{{ report.farmer.username }}</div>
+                        </td>
+                        <td>{{ report.disease_detected|default:"Pending" }}</td>
+                        <td>{{ report.confidence_level|default:"—" }}</td>
+                        <td><span
+                                class="badge {% if report.status == 'completed' %}badge-green{% elif report.status == 'failed' %}badge-red{% else %}badge-yellow{% endif %}">{{
+                                report.status }}</span></td>
+                        <td style="font-size:.82rem;">{{ report.created_at|date:"d M Y" }}</td>
+                        <td><a href="{% url 'report_detail' report.id %}" class="btn btn-ghost btn-sm">View</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="icon">🔬</div>
+            <p>No disease reports found matching the filters.</p>
+        </div>
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

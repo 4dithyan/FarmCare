@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Farmer Dashboard – FarmCare{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div>
+                <div class="sidebar-logo">🌿 FarmCare</div>
+                <div style="font-size:.78rem;color:rgba(255,255,255,.45);margin-top:.2rem;">Farmer Portal</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section">Main</div>
+            <a href="{% url 'farmer_dashboard' %}"
+                class="sidebar-link {% if request.resolver_match.url_name == 'farmer_dashboard' %}active{% endif %}">
+                <span class="icon">🏠</span> Dashboard
+            </a>
+            <a href="{% url 'ai_detect' %}"
+                class="sidebar-link {% if request.resolver_match.url_name == 'ai_detect' %}active{% endif %}">
+                <span class="icon">🤖</span> AI Detection
+            </a>
+            <a href="{% url 'history' %}"
+                class="sidebar-link {% if request.resolver_match.url_name == 'history' %}active{% endif %}">
+                <span class="icon">📋</span> My History
+            </a>
+            <a href="{% url 'soil_request' %}"
+                class="sidebar-link {% if request.resolver_match.url_name == 'soil_request' %}active{% endif %}">
+                <span class="icon">🧪</span> Soil Test
+            </a>
+            <div class="sidebar-section">Other</div>
+            <a href="{% url 'home' %}" class="sidebar-link"><span class="icon">🌐</span> Public Site</a>
+            <a href="{% url 'logout' %}" class="sidebar-link" style="color:rgba(255,100,100,.8);"><span
+                    class="icon">🚪</span> Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="page-header">
+            <h1>👋 Welcome, {{ request.user.first_name|default:request.user.email }}</h1>
+            <p>Here's what's happening on your farm today.</p>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="grid-4" style="margin-bottom:2rem;" data-stagger>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_reports }}</div>
+                <div class="stat-label">AI Reports</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ pending_soil }}</div>
+                <div class="stat-label">Pending Soil Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ profile.farm_size|default:"-" }}</div>
+                <div class="stat-label">Farm Size (acres)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ profile.location|default:"-"|truncatechars:8 }}</div>
+                <div class="stat-label">Location</div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem;">
+            <a href="{% url 'ai_detect' %}" class="btn btn-primary"><span>🤖</span> Detect Disease Now</a>
+            <a href="{% url 'soil_request' %}" class="btn btn-outline"><span>🧪</span> Request Soil Test</a>
+            <a href="{% url 'history' %}" class="btn btn-ghost"><span>📋</span> View History</a>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="grid-2">
+            <!-- Recent AI Reports -->
+            <div class="card">
+                <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+                    <h3 style="font-size:1rem;"><span>🤖</span> Recent AI Reports</h3>
+                    <a href="{% url 'history' %}" class="btn btn-ghost btn-sm">View All</a>
+                </div>
+                <div class="card-body" style="padding:0;">
+                    {% if recent_reports %}
+                    {% for report in recent_reports %}
+                    <a href="{% url 'report_detail' report.id %}"
+                        style="display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;border-bottom:1px solid var(--border);transition:background .2s;text-decoration:none;"
+                        onmouseover="this.style.background='var(--pale-green)'" onmouseout="this.style.background=''">
+                        <div
+                            style="width:42px;height:42px;border-radius:10px;background:var(--pale-green);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.2rem;">
+                            🔬</div>
+                        <div style="flex:1;min-width:0;">
+                            <div
+                                style="font-size:.85rem;font-weight:600;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                                {{ report.disease_detected|default:"Pending..." }}</div>
+                            <div style="font-size:.75rem;color:var(--text-light);">{{ report.created_at|date:"d M Y" }}
+                            </div>
+                        </div>
+                        <span
+                            class="badge {% if report.status == 'completed' %}badge-green{% elif report.status == 'failed' %}badge-red{% else %}badge-yellow{% endif %}">
+                            {{ report.status|default:"N/A" }}
+                        </span>
+                    </a>
+                    {% endfor %}
+                    {% else %}
+                    <div class="empty-state" style="padding:2rem;">
+                        <div class="icon">🔬</div>
+                        <p>No AI reports yet.<br /><a href="{% url 'ai_detect' %}"
+                                style="color:var(--primary);font-weight:600;">Run your first analysis →</a></p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+                <div class="card">
+                    <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+                        <h3 style="font-size:1rem;">💰 Market Price Trends (Kerala)</h3>
+                        <span style="font-size:0.75rem; color:var(--text-light);">Last 5 Days</span>
+                    </div>
+                    <div class="card-body" style="padding:0; max-height: 400px; overflow-y: auto;">
+                        {% if prices %}
+                        {% regroup prices by date as price_list %}
+                        {% for day in price_list %}
+                        <div
+                            style="background:var(--pale-green); padding: 0.4rem 1.5rem; font-size: 0.75rem; font-weight: 700; color: var(--primary-dark); border-bottom: 1px solid var(--border);">
+                            {% if day.grouper == today %}TODAY{% else %}{{ day.grouper|date:"d M Y"|upper }}{% endif %}
+                        </div>
+                        {% for price in day.list %}
+                        <div
+                            style="display:flex;justify-content:space-between;align-items:center;padding:.75rem 1.5rem;border-bottom:1px solid var(--border);">
+                            <div>
+                                <div style="font-size:.85rem;font-weight:700; color:#1e293b;">{{price.market}}</div>
+                                <div style="font-size:.7rem;color:var(--text-light)">{{price.grade}}</div>
+                            </div>
+                            <div style="text-align:right;">
+                                <div style="font-size:1.05rem;font-weight:800;color:var(--primary-dark);">
+                                    ₹{{price.modal_price}}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endfor %}
+                        {% else %}
+                        <p style="padding:2rem;text-align:center;color:var(--text-light);font-size:.85rem;">No price
+                            data available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Soil Requests -->
+                <div class="card">
+                    <div class="card-header" style="display:flex;justify-content:space-between;align-items:center;">
+                        <h3 style="font-size:1rem;">🧪 Soil Test Requests</h3>
+                        <a href="{% url 'soil_request' %}" class="btn btn-ghost btn-sm">+ New</a>
+                    </div>
+                    <div class="card-body" style="padding:0;">
+                        {% if soil_requests %}
+                        {% for req in soil_requests %}
+                        <div
+                            style="padding:.85rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+                            <div>
+                                <div style="font-size:.82rem;font-weight:600;">{{ req.farm_location|truncatechars:25 }}
+                                </div>
+                                <div style="font-size:.72rem;color:var(--text-light);">{{ req.requested_at|date:"d M Y"
+                                    }}</div>
+                            </div>
+                            <span
+                                class="badge {% if req.status == 'completed' %}badge-green{% elif req.status == 'rejected' %}badge-red{% elif req.status == 'pending' %}badge-yellow{% else %}badge-blue{% endif %}">
+                                {{ req.status|default:"pending" }}
+                            </span>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <p style="padding:1rem 1.5rem;color:var(--text-light);font-size:.85rem;">No soil requests yet.
+                            <a href="{% url 'soil_request' %}" style="color:var(--primary);">Request one →</a>
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

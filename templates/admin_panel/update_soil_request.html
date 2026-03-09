@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Update Soil Request – Admin{% endblock %}
+{% block content %}
+{% include 'admin_panel/_sidebar.html' %}
+<main class="dashboard-main">
+    <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+            <h1>🧪 Update Soil Request</h1>
+            <p>Request from {{ request_obj.farmer.get_full_name|default:request_obj.farmer.username }}</p>
+        </div>
+        <a href="{% url 'admin_soil_requests' %}" class="btn btn-ghost btn-sm">Back</a>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-header">
+                <h3 style="font-size:1rem;">Request Details</h3>
+            </div>
+            <div class="card-body">
+                <div style="display:flex;flex-direction:column;gap:1.5rem;">
+                    <div>
+                        <div
+                            style="font-size:.65rem;text-transform:uppercase;font-weight:700;letter-spacing:.1em;color:var(--text-light);margin-bottom:.4rem;">
+                            Location</div>
+                        <div style="font-weight:600;font-size:.95rem;">{{ request_obj.farm_location }}</div>
+                    </div>
+                    <div class="grid-2">
+                        <div>
+                            <div
+                                style="font-size:.65rem;text-transform:uppercase;font-weight:700;letter-spacing:.1em;color:var(--text-light);margin-bottom:.4rem;">
+                                Farm Size</div>
+                            <div style="font-weight:600;font-size:1.1rem;">{{ request_obj.farm_size }} <span
+                                    style="font-size:.85rem;color:var(--text-mid);">acres</span></div>
+                        </div>
+                        <div>
+                            <div
+                                style="font-size:.65rem;text-transform:uppercase;font-weight:700;letter-spacing:.1em;color:var(--text-light);margin-bottom:.4rem;">
+                                Soil Type</div>
+                            <div style="font-weight:600;font-size:1.1rem;">{{ request_obj.soil_type|default:"Not
+                                specified" }}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div
+                            style="font-size:.65rem;text-transform:uppercase;font-weight:700;letter-spacing:.1em;color:var(--text-light);margin-bottom:.4rem;">
+                            Additional Info</div>
+                        <div
+                            style="font-size:.88rem;color:var(--text-mid);background:var(--bg);padding:1rem;border-radius:10px;line-height:1.6;">
+                            {{ request_obj.additional_info|default:"No notes provided by farmer." }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 style="font-size:1rem;">Admin Action</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        {{ form.status }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Scheduled Visit Date</label>
+                        {{ form.scheduled_date }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Admin Notes (visible to farmer)</label>
+                        {{ form.admin_notes }}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Update Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+</div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My History – FarmCare{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div>
+                <div class="sidebar-logo">🌿 FarmCare</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section">Main</div>
+            <a href="{% url 'farmer_dashboard' %}" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a>
+            <a href="{% url 'ai_detect' %}" class="sidebar-link"><span class="icon">🤖</span> AI Detection</a>
+            <a href="{% url 'history' %}" class="sidebar-link active"><span class="icon">📋</span> My History</a>
+            <a href="{% url 'soil_request' %}" class="sidebar-link"><span class="icon">🧪</span> Soil Test</a>
+            <div class="sidebar-section">Other</div>
+            <a href="{% url 'home' %}" class="sidebar-link"><span class="icon">🌐</span> Public Site</a>
+            <a href="{% url 'logout' %}" class="sidebar-link" style="color:rgba(255,100,100,.8);"><span
+                    class="icon">🚪</span> Logout</a>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main">
+        <div class="page-header">
+            <h1>📋 My History</h1>
+            <p>All your AI reports and soil test requests in one place.</p>
+        </div>
+
+        <!-- Tabs -->
+        <div style="display:flex;gap:.5rem;margin-bottom:2rem;border-bottom:2px solid var(--border);padding-bottom:0;">
+            <a href="?tab=reports" class="btn btn-sm {% if tab != 'soil' %}btn-primary{% else %}btn-ghost{% endif %}"
+                style="border-radius:var(--radius) var(--radius) 0 0;">🤖 AI Reports ({{reports.count}})</a>
+            <a href="?tab=soil" class="btn btn-sm {% if tab == 'soil' %}btn-primary{% else %}btn-ghost{% endif %}"
+                style="border-radius:var(--radius) var(--radius) 0 0;">🧪 Soil Requests ({{soil_requests.count}})</a>
+        </div>
+
+        {% if tab == 'soil' %}
+        <!-- Soil Requests -->
+        {% if soil_requests %}
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+            {% for req in soil_requests %}
+            <div class="card" style="padding:0;">
+                <div
+                    style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;flex-wrap:wrap;gap:1rem;">
+                    <div style="display:flex;gap:1rem;align-items:center;">
+                        <div
+                            style="width:48px;height:48px;border-radius:12px;background:var(--pale-green);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;">
+                            🧪</div>
+                        <div>
+                            <div style="font-weight:600;font-size:.95rem;">{{req.farm_location}}</div>
+                            <div style="font-size:.78rem;color:var(--text-light);">{{req.requested_at|date:"d M Y"}} ·
+                                {{req.farm_size}} acres</div>
+                            {% if req.admin_notes %}<div
+                                style="font-size:.8rem;color:var(--text-mid);margin-top:.25rem;">📝
+                                {{req.admin_notes|truncatechars:80}}</div>{% endif %}
+                        </div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.5rem;">
+                        <span
+                            class="badge {% if req.status == 'completed' %}badge-green{% elif req.status == 'rejected' %}badge-red{% elif req.status == 'pending' %}badge-yellow{% else %}badge-blue{% endif %}">{{req.status|upper}}</span>
+                        {% if req.scheduled_date %}<div style="font-size:.75rem;color:var(--text-light);">📅
+                            {{req.scheduled_date}}</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="icon">🧪</div>
+            <h3>No soil test requests yet</h3>
+            <a href="{% url 'soil_request' %}" class="btn btn-primary" style="margin-top:1rem;">Request Soil Test →</a>
+        </div>
+        {% endif %}
+
+        {% else %}
+        <!-- AI Reports -->
+        {% if reports %}
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+            {% for report in reports %}
+            <a href="{% url 'report_detail' report.id %}" style="text-decoration:none;">
+                <div class="card" style="padding:0;transition:var(--transition);"
+                    onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+                    <div style="display:flex;align-items:center;gap:1.25rem;padding:1.25rem 1.5rem;flex-wrap:wrap;">
+                        {% if report.image %}
+                        <img src="{{ report.image.url }}" alt="plant"
+                            style="width:64px;height:64px;border-radius:12px;object-fit:cover;flex-shrink:0;" />
+                        {% else %}
+                        <div
+                            style="width:64px;height:64px;border-radius:12px;background:var(--pale-green);display:flex;align-items:center;justify-content:center;font-size:2rem;">
+                            🌿</div>
+                        {% endif %}
+                        <div style="flex:1;min-width:0;">
+                            <div style="font-weight:700;color:var(--text-dark);font-size:.95rem;">
+                                {{report.disease_detected|default:"Analysis Pending"}}</div>
+                            <div style="font-size:.78rem;color:var(--text-light);margin-top:.2rem;">
+                                {{report.created_at|date:"d M Y, g:i A"}}</div>
+                            {% if report.confidence_level %}<div
+                                style="font-size:.78rem;color:var(--text-mid);margin-top:.2rem;">Confidence:
+                                {{report.confidence_level}}</div>{% endif %}
+                        </div>
+                        <span
+                            class="badge {% if report.status == 'completed' %}badge-green{% elif report.status == 'failed' %}badge-red{% else %}badge-yellow{% endif %}">{{report.status}}</span>
+                        <span style="color:var(--text-light);font-size:1.2rem;">→</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="icon">🔬</div>
+            <h3>No AI reports yet</h3>
+            <p>Upload a photo to get your first disease analysis.</p>
+            <a href="{% url 'ai_detect' %}" class="btn btn-primary" style="margin-top:1rem;">Start AI Detection →</a>
+        </div>
+        {% endif %}
+        {% endif %}
+    </main>
+</div>
+{% endblock %}

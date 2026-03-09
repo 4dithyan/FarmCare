@@ -1,0 +1,36 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div>
+            <div class="sidebar-logo">🌿 FarmCare</div>
+            <div style="font-size:.78rem;color:rgba(255,255,255,.45);">Admin Panel</div>
+        </div>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="sidebar-section">Overview</div>
+        <a href="{% url 'admin_dashboard' %}"
+            class="sidebar-link {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}"><span
+                class="icon">📊</span> Dashboard</a>
+        <a href="{% url 'admin_farmers' %}"
+            class="sidebar-link {% if request.resolver_match.url_name == 'admin_farmers' %}active{% endif %}"><span
+                class="icon">👨‍🌾</span> Farmers</a>
+        <a href="{% url 'admin_disease_reports' %}"
+            class="sidebar-link {% if request.resolver_match.url_name == 'admin_disease_reports' %}active{% endif %}"><span
+                class="icon">🔬</span> Disease Reports</a>
+        <a href="{% url 'admin_soil_requests' %}"
+            class="sidebar-link {% if request.resolver_match.url_name == 'admin_soil_requests' %}active{% endif %}"><span
+                class="icon">🧪</span> Soil Requests</a>
+        <a href="{% url 'admin_districts' %}"
+            class="sidebar-link {% if request.resolver_match.url_name == 'admin_districts' %}active{% endif %}"><span
+                class="icon">📍</span> Districts</a>
+        <div class="sidebar-section">Tools</div>
+        <a href="{% url 'trigger_scrape' %}" class="sidebar-link"><span class="icon">🔄</span> Update Prices</a>
+        <a href="{% url 'admin_gallery_upload' %}"
+            class="sidebar-link {% if request.resolver_match.url_name == 'admin_gallery_upload' %}active{% endif %}"><span
+                class="icon">📸</span> Upload Gallery</a>
+
+        <div class="sidebar-section">Account</div>
+        <a href="{% url 'home' %}" class="sidebar-link"><span class="icon">🌐</span> Public Site</a>
+        <a href="{% url 'logout' %}" class="sidebar-link" style="color:rgba(255,100,100,.8);"><span
+                class="icon">🚪</span> Logout</a>
+    </nav>
+</aside>

@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About Us – FarmCare{% endblock %}
+{% block meta_desc %}Learn about FarmCare's mission to empower cardamom farmers with technology, AI, and expert
+agricultural guidance.{% endblock %}
+
+{% block content %}
+<!-- ── About Hero ─────────────────────────────────────── -->
+<section
+    style="position:relative;min-height:55vh;display:flex;align-items:center;padding-top:70px;overflow:hidden;background:linear-gradient(135deg,var(--primary-dark),var(--primary));">
+    <!-- Unsplash background -->
+    <div style="position:absolute;inset:0;">
+        <img src="https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?auto=format&fit=crop&w=1600&q=60"
+            alt="Cardamom farm" style="width:100%;height:100%;object-fit:cover;opacity:.15;" />
+    </div>
+    <div class="container" style="color:#fff;padding:4rem 1.5rem;position:relative;z-index:1;">
+        <div class="section-label" style="color:var(--accent-light);">🌿 Our Story</div>
+        <h1 class="display-font" style="color:#fff;max-width:600px;margin:.75rem 0 1.25rem;">Rooted in the
+            Soil,<br />Driven by Technology</h1>
+        <p style="max-width:550px;opacity:.8;font-size:1.1rem;line-height:1.8;">FarmCare was born from a simple belief:
+            every cardamom farmer deserves access to expert guidance, live market data, and cutting-edge AI — without
+            the complexity.</p>
+    </div>
+</section>
+
+<!-- ── Mission & Vision ───────────────────────────────── -->
+<section class="section">
+    <div class="container">
+        <div class="grid-2" style="align-items:center;gap:5rem;">
+            <div class="fade-in-left">
+                <div class="section-label">🎯 Our Mission</div>
+                <h2 class="section-title">Empowering Farmers with Smart Tech</h2>
+                <p style="color:var(--text-mid);line-height:1.8;margin-bottom:1.5rem;">We combine artificial
+                    intelligence, real-time market data, and agricultural expertise to give Kerala's cardamom farmers a
+                    competitive edge. From disease detection to soil testing — everything is just a click away.</p>
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div style="display:flex;gap:1rem;align-items:flex-start;">
+                        <div
+                            style="width:40px;height:40px;border-radius:10px;background:var(--pale-green);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            🤖</div>
+                        <div>
+                            <strong>AI-Powered Analysis</strong>
+                            <p style="font-size:.85rem;color:var(--text-light);margin-top:.2rem;">Google Gemini AI
+                                analyzes plant images with expert-level precision to detect diseases early.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:1rem;align-items:flex-start;">
+                        <div
+                            style="width:40px;height:40px;border-radius:10px;background:var(--pale-green);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            📊</div>
+                        <div>
+                            <strong>Real-Time Market Prices</strong>
+                            <p style="font-size:.85rem;color:var(--text-light);margin-top:.2rem;">Daily price scraping
+                                from official Spices Board markets helps farmers make informed decisions.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:1rem;align-items:flex-start;">
+                        <div
+                            style="width:40px;height:40px;border-radius:10px;background:var(--pale-green);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            🤝</div>
+                        <div>
+                            <strong>Community & Support</strong>
+                            <p style="font-size:.85rem;color:var(--text-light);margin-top:.2rem;">Direct connection
+                                between farmers and agricultural officers for soil testing and expert advice.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="fade-in-right">
+                <div style="border-radius:2rem;overflow:hidden;position:relative;">
+                    <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=700&q=80"
+                        alt="Cardamom plantation" style="width:100%;height:300px;object-fit:cover;" />
+                    <div
+                        style="position:absolute;inset:0;background:linear-gradient(to top,rgba(27,67,50,.9) 0%,transparent 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:2rem;">
+                        <h3 style="font-family:var(--font-display);color:#fff;margin-bottom:.5rem;">Our Vision</h3>
+                        <p style="color:rgba(255,255,255,.8);font-size:.9rem;line-height:1.6;">To make Kerala the
+                            world's most technologically advanced cardamom farming region.</p>
+                        <div style="display:flex;gap:2rem;margin-top:1.5rem;">
+                            <div style="text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:800;color:var(--accent-light);"
+                                    data-counter="{{ farmer_count }}">{{ farmer_count }}</div>
+                                <div style="font-size:.72rem;color:rgba(255,255,255,.6);">Farmers</div>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:800;color:var(--accent-light);"
+                                    data-counter="{{ report_count }}">{{ report_count }}</div>
+                                <div style="font-size:.72rem;color:rgba(255,255,255,.6);">AI Reports</div>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="font-size:1.5rem;font-weight:800;color:var(--accent-light);">100%</div>
+                                <div style="font-size:.72rem;color:rgba(255,255,255,.6);">Free</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── How It Works ───────────────────────────────────── -->
+<section class="section green-bg-section">
+    <div class="container">
+        <div class="center fade-in" style="margin-bottom:3rem;">
+            <div class="section-label">⚙️ How It Works</div>
+            <h2 class="section-title">Simple. Smart. Effective.</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;" data-stagger>
+            {% for step in "1234" %}
+            {% if forloop.counter == 1 %}
+            <div class="feature-card" style="text-align:center;">
+                <div style="font-size:2rem;font-weight:900;color:var(--accent);font-family:var(--font-display);">01
+                </div>
+                <div style="font-size:2rem;margin:.75rem 0;">📱</div>
+                <h3 style="font-size:1rem;margin-bottom:.5rem;">Register & Login</h3>
+                <p>Create your free farmer account in minutes.</p>
+            </div>
+            {% elif forloop.counter == 2 %}
+            <div class="feature-card" style="text-align:center;">
+                <div style="font-size:2rem;font-weight:900;color:var(--accent);font-family:var(--font-display);">02
+                </div>
+                <div style="font-size:2rem;margin:.75rem 0;">📸</div>
+                <h3 style="font-size:1rem;margin-bottom:.5rem;">Upload Plant Photo</h3>
+                <p>Take a clear photo of the affected cardamom plant or pod.</p>
+            </div>
+            {% elif forloop.counter == 3 %}
+            <div class="feature-card" style="text-align:center;">
+                <div style="font-size:2rem;font-weight:900;color:var(--accent);font-family:var(--font-display);">03
+                </div>
+                <div style="font-size:2rem;margin:.75rem 0;">🤖</div>
+                <h3 style="font-size:1rem;margin-bottom:.5rem;">AI Analysis</h3>
+                <p>Gemini AI analyzes the image and identifies diseases instantly.</p>
+            </div>
+            {% elif forloop.counter == 4 %}
+            <div class="feature-card" style="text-align:center;">
+                <div style="font-size:2rem;font-weight:900;color:var(--accent);font-family:var(--font-display);">04
+                </div>
+                <div style="font-size:2rem;margin:.75rem 0;">💊</div>
+                <h3 style="font-size:1rem;margin-bottom:.5rem;">Get Treatment Plan</h3>
+                <p>Receive medicine names, dosage, and precautions tailored to the disease.</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ── Team ───────────────────────────────────────────── -->
+{% if team_members %}
+<section class="section">
+    <div class="container">
+        <div class="center fade-in" style="margin-bottom:3rem;">
+            <div class="section-label">👥 Our Team</div>
+            <h2 class="section-title">The People Behind FarmCare</h2>
+        </div>
+        <div class="grid-3" data-stagger>
+            {% for member in team_members %}
+            {% if forloop.counter == 1 %}
+            {% with
+            img_url="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" %}
+            {% elif forloop.counter == 2 %}
+            {% with
+            img_url="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" %}
+            {% elif forloop.counter == 3 %}
+            {% with
+            img_url="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" %}
+            {% else %}
+            {% with
+            img_url="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80" %}
+            {% endif %}
+            <div class="card" style="text-align:center;">
+                <div style="height:180px;overflow:hidden;">
+                    {% if member.image %}
+                    <img src="{{ member.image.url }}" alt="{{ member.name }}"
+                        style="width:100%;height:100%;object-fit:cover;" />
+                    {% else %}
+                    <img src="{{ img_url }}" alt="{{ member.name }}" style="width:100%;height:100%;object-fit:cover;" />
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h3 style="font-size:1.1rem;">{{ member.name }}</h3>
+                    <p style="color:var(--primary);font-size:.85rem;font-weight:600;margin:.25rem 0;">{{ member.role }}
+                    </p>
+                    {% if member.bio %}<p style="font-size:.82rem;color:var(--text-light);">{{ member.bio }}</p>{% endif
+                    %}
+                </div>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}

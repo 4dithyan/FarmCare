@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}AI Detection – FarmCare{% endblock %}
+
+{% block content %}
+<div class="dashboard-layout" style="background: #f8fafc;">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div>
+                <div class="sidebar-logo">🌿 FarmCare</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section">Main</div>
+            <a href="{% url 'farmer_dashboard' %}" class="sidebar-link"><span class="icon">🏠</span> Dashboard</a>
+            <a href="{% url 'ai_detect' %}" class="sidebar-link active"><span class="icon">🤖</span> AI Detection</a>
+            <a href="{% url 'history' %}" class="sidebar-link"><span class="icon">📋</span> My History</a>
+            <a href="{% url 'soil_request' %}" class="sidebar-link"><span class="icon">🧪</span> Soil Test</a>
+            <div class="sidebar-section">Other</div>
+            <a href="{% url 'home' %}" class="sidebar-link"><span class="icon">🌐</span> Public Site</a>
+            <a href="{% url 'logout' %}" class="sidebar-link" style="color:rgba(255,100,100,.8);"><span
+                    class="icon">🚪</span> Logout</a>
+        </nav>
+    </aside>
+
+    <main class="dashboard-main" style="padding: 2rem; max-width: 1000px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h1 style="font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 1rem; font-weight: 800;">🔬 AI Crop
+                Doctor</h1>
+            <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                Get instant expert analysis for your cardamom crops. Upload a clear photo of the affected area.
+            </p>
+        </div>
+
+        <div class="card"
+            style="border: none; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); border-radius: 2rem; overflow: hidden; background: #fff;">
+            <div style="padding: 3rem;">
+                <form method="post" enctype="multipart/form-data" id="aiForm" style="max-width: 500px; margin: 0 auto;">
+                    {% csrf_token %}
+                    <div class="upload-v2" id="uploadArea" onclick="document.getElementById('imageInput').click()"
+                        style="border: 3px dashed #e2e8f0; border-radius: 1.5rem; transition: all 0.3s ease; cursor: pointer; position: relative; min-height: 300px; display: flex; align-items: center; justify-content: center; background: #fcfcfc;">
+
+                        <input type="file" id="imageInput" name="image" accept="image/*" required
+                            onchange="previewImage(this)"
+                            style="position:absolute; inset:0; opacity:0; cursor:pointer;">
+
+                        <div id="uploadPlaceholder" style="text-align:center; padding: 2rem;">
+                            <div style="font-size: 4rem; margin-bottom: 1rem;">📸</div>
+                            <h3 style="color: #1e293b; margin-bottom: 0.5rem; font-size: 1.25rem;">Select Plant Photo
+                            </h3>
+                            <p style="color: #94a3b8; font-size: 0.95rem;">Drag and drop or click to browse</p>
+                        </div>
+
+                        <div id="uploadPreview"
+                            style="display:none; width: 100%; height: 100%; position: absolute; inset: 0; padding: 1rem;">
+                            <img id="previewImg" src="" alt="Preview"
+                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 1rem;">
+                            <div
+                                style="position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(0,0,0,0.5); color: #fff; padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.8rem; backdrop-filter: blur(4px);">
+                                Tap to change
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary" id="submitBtn"
+                            style="width: 100%; padding: 1.25rem; font-size: 1.1rem; border-radius: 1rem; background: var(--primary-dark); border: none; font-weight: 700; letter-spacing: 0.5px; transition: transform 0.2s;">
+                            🚀 Start AI Detection
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div style="background: #f1f5f9; padding: 2rem; border-top: 1px solid #e2e8f0;">
+                <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #475569; font-size: 0.9rem;">
+                        <span style="font-size: 1.25rem;">⚡</span> Fast Analysis
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #475569; font-size: 0.9rem;">
+                        <span style="font-size: 1.25rem;">🌎</span> Bilingual Advice
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; color: #475569; font-size: 0.9rem;">
+                        <span style="font-size: 1.25rem;">🎓</span> Expert Precision
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            style="margin-top: 3rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+            <div class="card"
+                style="background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem;">
+                <h3
+                    style="font-size: 1.1rem; margin-bottom: 1rem; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+                    💡 Tips
+                </h3>
+                <ul style="color: #64748b; font-size: 0.9rem; padding-left: 1.2rem; line-height: 1.6;">
+                    <li>Ensure the plant is well-lit.</li>
+                    <li>Avoid blurry or out-of-focus images.</li>
+                    <li>The plant should fill most of the frame.</li>
+                </ul>
+            </div>
+            <div class="card"
+                style="background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem;">
+                <h3
+                    style="font-size: 1.1rem; margin-bottom: 1rem; color: #1e293b; display: flex; align-items: center; gap: 0.5rem;">
+                    🎯 Accuracy
+                </h3>
+                <p style="color: #64748b; font-size: 0.9rem; line-height: 1.6;">
+                    Our AI is trained on thousands of cardamom pest and disease samples for high precision.
+                </p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Premium Spinner Overlay -->
+<div class="spinner-overlay" id="loadingOverlay"
+    style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.9); backdrop-filter:blur(8px); z-index:9999; flex-direction:column; align-items:center; justify-content:center;">
+    <div style="position:relative; width:120px; height:120px;">
+        <div class="spinner-core"
+            style="width:100%; height:100%; border:4px solid #f1f5f9; border-top-color:var(--primary); border-radius:50%; animation: spin 1s linear infinite;">
+        </div>
+        <div
+            style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:2.5rem;">
+            🔬</div>
+    </div>
+    <div style="text-align:center; margin-top:2.5rem;">
+        <h2 style="font-size:2rem; color:#1e293b; margin-bottom:0.5rem; font-weight:800;">Our AI is detecting the
+            issue...</h2>
+        <p style="color:#64748b; font-size:1.1rem;">Please wait while we provide your expert analysis.</p>
+        <div style="margin-top:1.5rem; display:flex; gap:0.5rem; justify-content:center;">
+            <div class="dot-jump" style="animation-delay: 0s"></div>
+            <div class="dot-jump" style="animation-delay: 0.1s"></div>
+            <div class="dot-jump" style="animation-delay: 0.2s"></div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes jump {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .dot-jump {
+        width: 10px;
+        height: 10px;
+        background: var(--primary);
+        border-radius: 50%;
+        animation: jump 0.6s ease-in-out infinite;
+    }
+
+    .upload-v2:hover,
+    .upload-v2.drag-over {
+        border-color: var(--primary) !important;
+        background: #f8fafc !important;
+    }
+
+    .upload-v2.drag-over {
+        border-style: solid !important;
+        background: rgba(var(--primary-rgb), 0.05) !important;
+    }
+
+    #submitBtn:active {
+        transform: scale(0.98);
+    }
+</style>
+
+<script>
+    // 1. Improved Form Submission and Loading Overlay
+    const aiForm = document.getElementById('aiForm');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const submitBtn = document.getElementById('submitBtn');
+
+    aiForm.addEventListener('submit', function (e) {
+        // Show the overlay immediately
+        loadingOverlay.style.display = 'flex';
+        submitBtn.innerHTML = '🔬 Analyzing...';
+    });
+
+    // 2. Drag and Drop Logic
+    const uploadArea = document.getElementById('uploadArea');
+    const imageInput = document.getElementById('imageInput');
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, e => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.add('drag-over');
+        }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, e => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadArea.classList.remove('drag-over');
+        }, false);
+    });
+
+    uploadArea.addEventListener('drop', e => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files && files.length > 0) {
+            imageInput.files = files;
+            previewImage(imageInput);
+        }
+    }, false);
+
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('uploadPreview').style.display = 'block';
+                document.getElementById('uploadPlaceholder').style.display = 'none';
+                document.getElementById('uploadArea').style.borderColor = '#28a745';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+{% endblock %}
