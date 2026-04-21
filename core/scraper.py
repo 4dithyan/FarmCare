@@ -5,8 +5,9 @@ Runs once a day via management command or APScheduler.
 
 import requests
 from bs4 import BeautifulSoup
-from datetime import date
+from datetime import date, datetime
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 

@@ -51,48 +51,54 @@ def analyze_cardamom_image(image_path: str, history_context: str = "None") -> di
         mime_map = {'jpg': 'image/jpeg', 'jpeg': 'image/jpeg', 'png': 'image/png', 'webp': 'image/webp'}
         mime_type = mime_map.get(ext, 'image/jpeg')
 
-        prompt = f"""System Role: You are a senior Agricultural Pathologist specialized in Elettaria cardamomum (Small Cardamom) and Amomum subulatum (Large Cardamom) in India.
+        prompt = f"""System Role: You are an elite Agricultural Pathologist specialized in Cardamom (Small & Large) pathology in Kerala, India.
 
-Task: Analyze the provided plant image.
+Task: Analyze the provided image meticulously.
 
-Constraint 1: Species Identification (Mandatory)
-Verify if the image contains a cardamom plant (leaf, capsule, stem, or rhizome).
+STRICT CONSTRAINT 1: Species Identification (Mandatory)
+Are you 100% certain this image is of a Cardamom plant (leaf, capsule, stem, or rhizome)? Look closely at the leaf texture, venation, and pods.
+If this is ANY OTHER plant, object, human, or unrelated picture:
+STOP ALL ANALYSIS IMMEDIATELY. Output EXACTLY AND ONLY this JSON string, and nothing else at all:
+{{"error": "species_mismatch", "message": "This image is not a cardamom plant. Please upload a clear photo of your cardamom crop for analysis."}}
 
-If NOT Cardamom: Stop all analysis. Output ONLY a valid JSON: {{"error": "species_mismatch", "message": "This image is not a cardamom plant. Please upload a clear photo of your cardamom crop for analysis."}}.
+STRICT CONSTRAINT 2: Real Pathology details
+If it IS a cardamom plant, you must look for any sign of disease. DO NOT default to "Healthy". Look for:
+- Katte disease (Mosaic mottling on leaves, pale green strips)
+- Azhukal/Capsule Rot (Water-soaked lesions, rotting pods emitting foul smell)
+- Rhizome Rot / Pythium (Yellowing of leaves, decaying shoots at base)
+- Thrips / Shoot borer damage (Scabs on pods, bored stems)
+- Leaf Blight (Dried leaf tips/edges, large lesions)
+If you see ANY discoloration, holes, spots, rot, or slight yellowing, IDENTIFY THE DISEASE accurately with real technical details. 
+Only output "Healthy" if the plant is vividly green with absolutely zero flaws, spots, or pests.
 
-Constraint 2: History Context (Memory)
+Constraint 3: History Context (Memory)
 [[HISTORY_CONTEXT]]: {history_context}
+If it contains data, expand on it with an EXPERT DEEP DIVE.
 
-If [[HISTORY_CONTEXT]] is "None": Provide a fresh, comprehensive diagnosis.
-
-If [[HISTORY_CONTEXT]] contains data: This means the user has uploaded this image before.
-Consistency: You MUST identify the same disease as mentioned in the context.
-Advanced Expansion: You MUST add a section called **EXPERT DEEP DIVE:** with new, advanced technical advice (e.g., specific soil pH adjustment, shade-tree density management, or bio-control agents like Trichoderma harzianum) that was NOT in the previous result.
-
-Output Format (if Cardamom):
-For EACH section, provide the info first in English, then in Malayalam (മലയാളം). Use simple, step-by-step terms. 
-DO NOT use markdown symbols like ** or + or # inside the descriptions (only for section headers).
+Output Format (only if it IS Cardamom):
+For EACH section, provide the info first in English, then in Malayalam (മലയാളം).
+DO NOT use markdown symbols like ** or + inside the texts.
 
 **VALIDATION:**
 - IS_CARDAMOM: Yes
-- Image Content: [Briefly describe what you see]
+- Image Content: [What exactly do you see in the frame?]
 
 **DISEASE DETECTION:**
-- Disease Name: [Specific name or "Healthy"]
+- Disease Name: [Exact Scientific/Common Name, or "Healthy"]
 - Confidence Level: [High/Medium/Low]
-- Affected Parts: [leaves/pods/stem/roots etc.]
+- Affected Parts: [Leaves/Pods/Stem/Roots]
 
 **SYMPTOMS OBSERVED:**
 English: 1. ...
 Malayalam: 1. ...
 
 **DIAGNOSIS:**
-English: ...
-Malayalam: ...
+English: [Provide deep, real details about the cause and pathology]
+Malayalam: [Translation]
 
 **RECOMMENDED MEDICINES/TREATMENTS:**
-English: ...
-Malayalam: ...
+English: [Specific chemical or organic fungicide/insecticide names]
+Malayalam: [Translation]
 
 **DOSAGE & APPLICATION:**
 English: Step 1: ...
@@ -103,10 +109,10 @@ English: ...
 Malayalam: ...
 
 **SEVERITY:**
-[Critical/High/Medium/Low]
+[Critical/High/Medium/Low/Healthy]
 
 **EXPERT DEEP DIVE:**
-[English and Malayalam technical details for repeat uploads only]
+[Advanced agronomy tips]
 """
 
         image_part = {
