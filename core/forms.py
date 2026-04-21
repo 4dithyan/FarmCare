@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from .models import UserProfile, GalleryImage, SoilTestRequest, AIReport, District
 
 
+import re
+
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(
         label='Email or Phone Number',
@@ -22,6 +24,16 @@ class CustomLoginForm(AuthenticationForm):
     )
 
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if username:
+            is_email = re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', username)
+            is_phone = re.match(r'^\d{10}$', username)
+            if not is_email and not is_phone:
+                raise forms.ValidationError("Please enter a valid email address or a 10-digit phone number.")
+        return username
+
+
 import uuid
 
 class FarmerRegisterForm(forms.ModelForm):
@@ -38,8 +50,8 @@ class FarmerRegisterForm(forms.ModelForm):
         widget=forms.EmailInput(attrs={'class': 'form-input', 'placeholder': 'Email Address'})
     )
     phone = forms.CharField(
-        max_length=15, required=False,
-        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Phone Number'})
+        max_length=10, min_length=10, required=True,
+        widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': '10-digit Phone Number', 'pattern': '[0-9]{10}'})
     )
     district = forms.ModelChoiceField(
         queryset=District.objects.filter(is_active=True),
@@ -72,6 +84,13 @@ class FarmerRegisterForm(forms.ModelForm):
             self.add_error('email', "A user with that email already exists.")
             
         return cleaned_data
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if phone:
+            if not re.match(r'^\d{10}$', phone):
+                raise forms.ValidationError("Phone number must be exactly 10 digits.")
+        return phone
 
     def save(self, commit=True):
         user = super().save(commit=False)
