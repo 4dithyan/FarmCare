@@ -91,4 +91,4 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Gemini API Key - Set your key here or use environment variable
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyC3v75CTDragBLMEBkfWkowy6FudsBnaCw')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', 'YOUR_API_KEY_HERE')

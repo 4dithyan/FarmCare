@@ -27,6 +27,8 @@ class CustomLoginForm(AuthenticationForm):
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if username:
+            if username.lower() == 'admin':
+                return username
             is_email = re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', username)
             is_phone = re.match(r'^\d{10}$', username)
             if not is_email and not is_phone:

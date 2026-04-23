@@ -14,7 +14,7 @@
             <select name="farmer_id" class="form-input" style="width:200px;">
                 <option value="">All Farmers</option>
                 {% for farmer in farmers %}
-                <option value="{{ farmer.id }}" {% if selected_farmer==farmer.id|stringformat:"s" %}selected{% endif %}>
+                <option value="{{ farmer.id }}" {% if selected_farmer == farmer.id|stringformat:"s" %}selected{% endif %}>
                     {{ farmer.get_full_name|default:farmer.username }}</option>
                 {% endfor %}
             </select>
@@ -52,15 +52,13 @@
                             {% endif %}
                         </td>
                         <td>
-                            <div style="font-weight:600;font-size:.88rem;">{{
-                                report.farmer.get_full_name|default:report.farmer.username }}</div>
+                            <div style="font-weight:600;font-size:.88rem;">{{ report.farmer.get_full_name|default:report.farmer.username }}</div>
                             <div style="font-size:.75rem;color:var(--text-mid);">@{{ report.farmer.username }}</div>
                         </td>
                         <td>{{ report.disease_detected|default:"Pending" }}</td>
                         <td>{{ report.confidence_level|default:"—" }}</td>
                         <td><span
-                                class="badge {% if report.status == 'completed' %}badge-green{% elif report.status == 'failed' %}badge-red{% else %}badge-yellow{% endif %}">{{
-                                report.status }}</span></td>
+                                class="badge {% if report.status == 'completed' %}badge-green{% elif report.status == 'failed' %}badge-red{% else %}badge-yellow{% endif %}">{{ report.status }}</span></td>
                         <td style="font-size:.82rem;">{{ report.created_at|date:"d M Y" }}</td>
                         <td><a href="{% url 'report_detail' report.id %}" class="btn btn-ghost btn-sm">View</a></td>
                     </tr>
