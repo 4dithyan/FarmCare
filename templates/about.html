@@ -145,51 +145,6 @@ agricultural guidance.{% endblock %}
     </div>
 </section>
 
-<!-- ── Team ───────────────────────────────────────────── -->
-{% if team_members %}
-<section class="section">
-    <div class="container">
-        <div class="center fade-in" style="margin-bottom:3rem;">
-            <div class="section-label">👥 Our Team</div>
-            <h2 class="section-title">The People Behind FarmCare</h2>
-        </div>
-        <div class="grid-3" data-stagger>
-            {% for member in team_members %}
-            {% if forloop.counter == 1 %}
-            {% with
-            img_url="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" %}
-            {% elif forloop.counter == 2 %}
-            {% with
-            img_url="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" %}
-            {% elif forloop.counter == 3 %}
-            {% with
-            img_url="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" %}
-            {% else %}
-            {% with
-            img_url="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80" %}
-            {% endif %}
-            <div class="card" style="text-align:center;">
-                <div style="height:180px;overflow:hidden;">
-                    {% if member.image %}
-                    <img src="{{ member.image.url }}" alt="{{ member.name }}"
-                        style="width:100%;height:100%;object-fit:cover;" />
-                    {% else %}
-                    <img src="{{ img_url }}" alt="{{ member.name }}" style="width:100%;height:100%;object-fit:cover;" />
-                    {% endif %}
-                </div>
-                <div class="card-body">
-                    <h3 style="font-size:1.1rem;">{{ member.name }}</h3>
-                    <p style="color:var(--primary);font-size:.85rem;font-weight:600;margin:.25rem 0;">{{ member.role }}
-                    </p>
-                    {% if member.bio %}<p style="font-size:.82rem;color:var(--text-light);">{{ member.bio }}</p>{% endif
-                    %}
-                </div>
-            </div>
-            {% endwith %}
-            {% endfor %}
-        </div>
-    </div>
-</section>
-{% endif %}
+
 
 {% endblock %}

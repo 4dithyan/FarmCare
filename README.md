@@ -1,25 +1,24 @@
 # 🌿 FarmCare: The Digital Companion for Cardamom Farmers
 
-Welcome to **FarmCare**, a revolutionary smart farming platform designed specifically to empower Cardamom farmers in Kerala. FarmCare bridges the gap between traditional farming and modern technology, providing AI-driven disease diagnosis and real-time market intelligence.
+Welcome to **FarmCare**, an all-in-one digital companion designed specifically for Cardamom farmers in Kerala. FarmCare leverages advanced **Artificial Intelligence (AI)** to identify plant diseases from images and provides real-time market prices, empowering farmers to make data-driven decisions.
 
 ---
 
-## 🌟 What is FarmCare?
+## 🚀 Key Features
 
-FarmCare is a high-fidelity digital assistant that helps farmers:
-- **🔍 Identify Diseases**: Using state-of-the-art AI to diagnose crop issues from photos.
-- **📈 Track Market Prices**: Real-time updates from Kerala's major auction centers.
-- **📊 Analyze Trends**: Visualize price movements to make informed selling decisions.
-- **🧪 Soil Health**: Request and manage soil testing services.
-- **🌍 Bilingual Support**: Seamlessly switch between **Malayalam** and **English**.
+- **🤖 AI Crop Doctor**: Instantly identify crop diseases by uploading a photo of a leaf or pod. Our AI provides diagnosis and treatment plans.
+- **💰 Live Market Prices**: Get real-time auction prices and daily updates from major cardamom markets (Kumily, Vandanmedu, etc.).
+- **📉 Price Trends**: Analyze historical price data with interactive charts to determine the best time to sell.
+- **🧪 Soil Testing**: Request professional soil testing services directly through the platform.
+- **🌍 Bilingual Support**: Get AI advice and platform instructions in both **English** and **Malayalam**.
 
 ---
 
-## 🛠️ Easy Installation Guide (Non-IT Friendly)
+## 🛠️ Step-by-Step Installation Guide (Non-IT Friendly)
 
 You don't need any coding knowledge to get FarmCare up and running. Just follow these simple steps:
 
-### 1. Install Python (The Heart of the App)
+### 1. Install Python
 *   Download Python from [python.org](https://www.python.org/downloads/).
 *   **⚠️ CRITICAL**: When the installer opens, check the box that says **"Add Python to PATH"** before clicking Install.
 
@@ -32,7 +31,6 @@ You don't need any coding knowledge to get FarmCare up and running. Just follow 
     ```bash
     pip install -r requirements.txt
     ```
-*   *This will download all the "brain" components needed for the app.*
 
 ### 4. Setup the Database & Data
 *   Type these two commands one after the other (press Enter after each):
@@ -40,7 +38,6 @@ You don't need any coding knowledge to get FarmCare up and running. Just follow 
     python manage.py migrate
     python seed_data.py
     ```
-*   *This creates your local database and fills it with initial farming data.*
 
 ### 5. Add your AI Key & Secrets
 *   Get a free key from [Google AI Studio](https://aistudio.google.com/app/apikey).
@@ -58,8 +55,7 @@ Whenever you want to use the app, do this:
     ```bash
     python manage.py runserver
     ```
-4.  **Open your Browser** (Chrome/Edge) and go to:
-    [**http://127.0.0.1:8000/**](http://127.0.0.1:8000/)
+4.  **Open your Browser** (Chrome/Edge) and go to: [**http://127.0.0.1:8000/**](http://127.0.0.1:8000/)
 
 ### 🔑 Demo Login Details
 | User Type | Username | Password |
@@ -75,17 +71,15 @@ Whenever you want to use the app, do this:
 All your records—prices, reports, and farmer details—are stored in a single file called `db.sqlite3` inside the project folder.
 
 ### How to Connect and View Data Directly:
-If you want to see the "raw data" behind the scenes:
 1.  **Download a Viewer**: Get [DB Browser for SQLite](https://sqlitebrowser.org/dl/).
 2.  **Open the File**: Run the program and click "Open Database".
 3.  **Select File**: Choose the `db.sqlite3` file in the project folder.
-4.  **Browse Data**: Click the **"Browse Data"** tab to see all your tables (Users, Prices, Reports, etc.).
+4.  **Browse Data**: Click the **"Browse Data"** tab to see your tables.
 
 ---
 
 ## 📂 Project Structure
 
-For those curious about how the app is organized:
 - **`core/`**: The brain of the app (contains logic for AI, scraping, and user profiles).
 - **`farmcare/`**: The configuration center (settings and links).
 - **`templates/`**: The design files (what you see on the screen).
