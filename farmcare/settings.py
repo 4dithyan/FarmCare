@@ -5,9 +5,14 @@ Django settings for farmcare project.
 from pathlib import Path
 import os
 
+from dotenv import load_dotenv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-farmcare-cardamom-secret-key-2024-change-in-production'
+# Load environment variables from .env file
+load_dotenv(BASE_DIR / '.env')
+
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-default-change-me')
 
 DEBUG = True
 
@@ -90,5 +95,5 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-# Gemini API Key - Set your key here or use environment variable
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyC3v75CTDragBLMEBkfWkowy6FudsBnaCw')
+# Gemini API Key - Set in your .env file
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')

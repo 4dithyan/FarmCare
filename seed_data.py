@@ -19,24 +19,24 @@ print("🌱 Seeding FarmCare database...")
 
 # ── Admin user ──────────────────────────────────────────────
 if not User.objects.filter(username='admin').exists():
-    admin = User.objects.create_superuser('admin', 'admin@farmcare.in', 'admin123')
+    admin = User.objects.create_superuser('admin', 'admin@gmail.com', 'admin123')
     admin.first_name = 'Admin'
     admin.last_name = 'FarmCare'
     admin.save()
-    UserProfile.objects.create(user=admin, role='admin', phone='+91 9876543210', location='Kerala')
+    UserProfile.objects.create(user=admin, role='admin', phone='9778238064', location='Kerala')
     print("✅ Admin user created (username: admin, password: admin123)")
 else:
     print("ℹ️  Admin user already exists")
 
 # ── Sample farmer ───────────────────────────────────────────
 if not User.objects.filter(username='farmer1').exists():
-    farmer = User.objects.create_user('farmer1', 'farmer1@farmcare.in', 'farmer123')
+    farmer = User.objects.create_user('farmer1', 'mailforadithyan@gmail.com', 'farmer123')
     farmer.first_name = 'Rajan'
     farmer.last_name = 'Pillai'
     farmer.save()
     UserProfile.objects.create(
         user=farmer, role='farmer',
-        phone='+91 9876540001', location='Idukki, Kerala',
+        phone='9778238064', location='Idukki, Kerala',
         farm_size=3.5, bio='Third-generation cardamom farmer from Idukki.'
     )
     print("✅ Sample farmer created (username: farmer1, password: farmer123)")
